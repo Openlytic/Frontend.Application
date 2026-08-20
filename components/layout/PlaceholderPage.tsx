@@ -1,8 +1,8 @@
-'use client';
+"use client";
 
-import React from 'react';
-import { Card, Tag } from 'antd';
-import { RocketOutlined } from '@ant-design/icons';
+import React from "react";
+import { Card, Tag } from "antd";
+import { RocketOutlined } from "@ant-design/icons";
 
 interface PlaceholderPageProps {
   title: string;
@@ -10,9 +10,15 @@ interface PlaceholderPageProps {
   badge?: string;
 }
 
-const PlaceholderPage = ({ title, description, badge = 'Coming soon' }: PlaceholderPageProps) => (
+const PlaceholderPage = ({
+  title,
+  description,
+  badge = "Coming soon",
+}: PlaceholderPageProps) => (
   <div className="animate-fade-up">
-    <h1 className="font-poppins text-2xl font-semibold text-ink tracking-tight">{title}</h1>
+    <h1 className="font-poppins text-2xl font-semibold text-ink tracking-tight">
+      {title}
+    </h1>
     <p className="mt-1 mb-6 text-muted text-sm">{description}</p>
 
     <Card className="rounded-2xl shadow-card">
@@ -24,7 +30,9 @@ const PlaceholderPage = ({ title, description, badge = 'Coming soon' }: Placehol
         <p className="mt-1 max-w-md text-sm text-muted">
           This view is being built. We&apos;re wiring it to real data next.
         </p>
-        <Tag className="mt-4 rounded-full !bg-subtle !text-brand !border-none">{badge}</Tag>
+        <Tag className="mt-4 rounded-full !bg-subtle !text-brand !border-none">
+          {badge}
+        </Tag>
       </div>
     </Card>
   </div>

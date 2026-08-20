@@ -1,23 +1,28 @@
-'use client';
+"use client";
 
-import React from 'react';
-import { useRouter } from 'next/navigation';
-import { Avatar, Dropdown, Button } from 'antd';
-import { LogoutOutlined, UserOutlined, MenuOutlined, DownOutlined } from '@ant-design/icons';
-import { requestForGetUser, requestForLogout } from '@/helpers/restApiRequests';
-import { getAccessToken, removeTokens } from '@/helpers/token';
-import type { UserData } from '@/helpers/restApiRequests';
+import React from "react";
+import { useRouter } from "next/navigation";
+import { Avatar, Dropdown, Button } from "antd";
+import {
+  LogoutOutlined,
+  UserOutlined,
+  MenuOutlined,
+  DownOutlined,
+} from "@ant-design/icons";
+import { requestForGetUser, requestForLogout } from "@/helpers/restApiRequests";
+import { getAccessToken, removeTokens } from "@/helpers/token";
+import type { UserData } from "@/helpers/restApiRequests";
 
 const initials = (name?: string, email?: string): string => {
   if (name) {
     return name
-      .split(' ')
+      .split(" ")
       .filter(Boolean)
       .slice(0, 2)
       .map((part) => part[0]?.toUpperCase())
-      .join('');
+      .join("");
   }
-  return (email || '?')[0].toUpperCase();
+  return (email || "?")[0].toUpperCase();
 };
 
 interface TopbarProps {
@@ -36,24 +41,36 @@ const Topbar = ({ onOpenSidebar }: TopbarProps) => {
 
   const handleLogout = async () => {
     try {
-      await requestForLogout({ token: getAccessToken(), type: 'access_token' });
+      await requestForLogout({ token: getAccessToken(), type: "access_token" });
     } catch {
       // local logout regardless of server state
     } finally {
       removeTokens();
-      router.push('/login');
+      router.push("/login");
     }
   };
 
   const displayName =
-    [user?.first_name, user?.last_name].filter(Boolean).join(' ') || user?.email || '';
+    [user?.first_name, user?.last_name].filter(Boolean).join(" ") ||
+    user?.email ||
+    "";
 
   const userMenu = {
     items: [
-      { key: 'profile', icon: <UserOutlined />, label: 'My profile', onClick: () => router.push('/my-profile') },
-      { type: 'divider' as const },
-      { key: 'logout', icon: <LogoutOutlined />, label: 'Sign out', onClick: handleLogout }
-    ]
+      {
+        key: "profile",
+        icon: <UserOutlined />,
+        label: "My profile",
+        onClick: () => router.push("/my-profile"),
+      },
+      { type: "divider" as const },
+      {
+        key: "logout",
+        icon: <LogoutOutlined />,
+        label: "Sign out",
+        onClick: handleLogout,
+      },
+    ],
   };
 
   return (
@@ -66,7 +83,7 @@ const Topbar = ({ onOpenSidebar }: TopbarProps) => {
         aria-label="Open navigation"
       />
       <div className="flex-1" />
-      <Dropdown menu={userMenu} placement="bottomRight" trigger={['click']}>
+      <Dropdown menu={userMenu} placement="bottomRight" trigger={["click"]}>
         <button className="flex items-center gap-2.5 rounded-xl border border-line bg-white px-2.5 py-1.5 hover:border-brand/40 transition-colors cursor-pointer">
           <Avatar
             size="small"
@@ -76,7 +93,7 @@ const Topbar = ({ onOpenSidebar }: TopbarProps) => {
             {user?.first_name ? initials(displayName, user?.email) : undefined}
           </Avatar>
           <span className="hidden sm:block max-w-[180px] truncate text-sm font-medium text-ink">
-            {displayName || 'Account'}
+            {displayName || "Account"}
           </span>
           <DownOutlined className="text-xs text-muted" />
         </button>

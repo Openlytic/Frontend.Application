@@ -1,4 +1,4 @@
-import React from 'react';
+import React from "react";
 
 interface OpenlyticMarkProps {
   className?: string;
@@ -15,8 +15,8 @@ interface OpenlyticLogoProps {
 // Openlytic brand mark: an open envelope over a rising analytics pulse,
 // drawn in the indigo -> violet brand gradient.
 export const OpenlyticMark = ({
-  className = 'h-9 w-9',
-  gradientId = 'oly-mark'
+  className = "h-9 w-9",
+  gradientId = "oly-mark",
 }: OpenlyticMarkProps) => (
   <svg viewBox="0 0 40 40" fill="none" className={className} aria-hidden="true">
     <defs>
@@ -25,7 +25,14 @@ export const OpenlyticMark = ({
         <stop offset="1" stopColor="#8B5CF6" />
       </linearGradient>
     </defs>
-    <rect x="1.5" y="1.5" width="37" height="37" rx="11" fill={`url(#${gradientId})`} />
+    <rect
+      x="1.5"
+      y="1.5"
+      width="37"
+      height="37"
+      rx="11"
+      fill={`url(#${gradientId})`}
+    />
     <path
       d="M10 13.5c0-1.2.9-2 2-2h16c1.1 0 2 .8 2 2v13c0 1.2-.9 2-2 2H12c-1.1 0-2-.8-2-2v-13Z"
       fill="#FFFFFF"
@@ -62,14 +69,14 @@ export const OpenlyticMark = ({
 
 export const OpenlyticLogo = ({
   light = false,
-  markClassName = 'h-8 w-8',
-  gradientId = 'oly-mark'
+  markClassName = "h-8 w-8",
+  gradientId = "oly-mark",
 }: OpenlyticLogoProps) => (
   <div className="flex items-center gap-2.5">
     <OpenlyticMark className={markClassName} gradientId={gradientId} />
     <span
       className={`font-poppins text-xl font-semibold tracking-tight ${
-        light ? 'text-white' : 'text-ink'
+        light ? "text-white" : "text-ink"
       }`}
     >
       Openlytic

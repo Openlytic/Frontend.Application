@@ -1,16 +1,16 @@
-'use client';
+"use client";
 
-import React from 'react';
-import Link from 'next/link';
-import { usePathname } from 'next/navigation';
+import React from "react";
+import Link from "next/link";
+import { usePathname } from "next/navigation";
 import {
   AppstoreOutlined,
   MailOutlined,
   BarChartOutlined,
   SettingOutlined,
-  UserOutlined
-} from '@ant-design/icons';
-import { OpenlyticMark } from '@/components/core/OpenlyticLogo';
+  UserOutlined,
+} from "@ant-design/icons";
+import { OpenlyticMark } from "@/components/core/OpenlyticLogo";
 
 interface NavItem {
   key: string;
@@ -19,11 +19,11 @@ interface NavItem {
 }
 
 export const NAV_ITEMS: NavItem[] = [
-  { key: '/', label: 'Dashboard', icon: <AppstoreOutlined /> },
-  { key: '/emails', label: 'Emails', icon: <MailOutlined /> },
-  { key: '/analytics', label: 'Analytics', icon: <BarChartOutlined /> },
-  { key: '/settings', label: 'Settings', icon: <SettingOutlined /> },
-  { key: '/my-profile', label: 'My profile', icon: <UserOutlined /> }
+  { key: "/", label: "Dashboard", icon: <AppstoreOutlined /> },
+  { key: "/emails", label: "Emails", icon: <MailOutlined /> },
+  { key: "/analytics", label: "Analytics", icon: <BarChartOutlined /> },
+  { key: "/settings", label: "Settings", icon: <SettingOutlined /> },
+  { key: "/my-profile", label: "My profile", icon: <UserOutlined /> },
 ];
 
 interface SidebarNavProps {
@@ -32,7 +32,8 @@ interface SidebarNavProps {
 }
 
 const SidebarNav = ({ pathname, onNavigate }: SidebarNavProps) => {
-  const isActive = (key: string) => (key === '/' ? pathname === key : pathname.startsWith(key));
+  const isActive = (key: string) =>
+    key === "/" ? pathname === key : pathname.startsWith(key);
 
   return (
     <nav className="mt-2 flex-1 space-y-1 px-3">
@@ -45,13 +46,19 @@ const SidebarNav = ({ pathname, onNavigate }: SidebarNavProps) => {
             onClick={onNavigate}
             className={`flex items-center gap-3 rounded-xl px-3.5 py-2.5 text-sm font-medium transition-colors ${
               active
-                ? 'bg-white/10 text-white'
-                : 'text-white/60 hover:bg-white/5 hover:text-white'
+                ? "bg-white/10 text-white"
+                : "text-white/60 hover:bg-white/5 hover:text-white"
             }`}
           >
-            <span className={`text-base ${active ? 'text-accent' : 'text-white/50'}`}>{item.icon}</span>
+            <span
+              className={`text-base ${active ? "text-accent" : "text-white/50"}`}
+            >
+              {item.icon}
+            </span>
             {item.label}
-            {active && <span className="ml-auto h-1.5 w-1.5 rounded-full bg-accent" />}
+            {active && (
+              <span className="ml-auto h-1.5 w-1.5 rounded-full bg-accent" />
+            )}
           </Link>
         );
       })}
@@ -62,7 +69,9 @@ const SidebarNav = ({ pathname, onNavigate }: SidebarNavProps) => {
 const SidebarBrand = () => (
   <div className="flex items-center gap-2.5 px-5 h-16">
     <OpenlyticMark className="h-8 w-8" gradientId="oly-mark-side" />
-    <span className="font-poppins text-lg font-semibold tracking-tight text-white">Openlytic</span>
+    <span className="font-poppins text-lg font-semibold tracking-tight text-white">
+      Openlytic
+    </span>
   </div>
 );
 

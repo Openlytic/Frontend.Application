@@ -1,9 +1,9 @@
-'use client';
+"use client";
 
-import React from 'react';
-import { Form, Input, Button, Alert, Typography } from 'antd';
-import { MailOutlined } from '@ant-design/icons';
-import { getErrorMessage } from '@/helpers/errors';
+import React from "react";
+import { Form, Input, Button, Alert, Typography } from "antd";
+import { MailOutlined } from "@ant-design/icons";
+import { getErrorMessage } from "@/helpers/errors";
 
 const { Text } = Typography;
 
@@ -17,7 +17,13 @@ interface VerificationFormProps {
   loading: boolean;
 }
 
-const VerificationForm = ({ email, onVerify, onResend, resendLoading, loading }: VerificationFormProps) => {
+const VerificationForm = ({
+  email,
+  onVerify,
+  onResend,
+  resendLoading,
+  loading,
+}: VerificationFormProps) => {
   const [error, setError] = React.useState<string | null>(null);
   const [resendSent, setResendSent] = React.useState(false);
 
@@ -26,7 +32,7 @@ const VerificationForm = ({ email, onVerify, onResend, resendLoading, loading }:
     try {
       await onVerify(values.token.trim());
     } catch (err) {
-      setError(getErrorMessage(err) || 'Verification failed');
+      setError(getErrorMessage(err) || "Verification failed");
     }
   };
 
@@ -36,7 +42,7 @@ const VerificationForm = ({ email, onVerify, onResend, resendLoading, loading }:
       await onResend();
       setResendSent(true);
     } catch (err) {
-      setError(getErrorMessage(err) || 'Could not resend the code');
+      setError(getErrorMessage(err) || "Could not resend the code");
     }
   };
 
@@ -50,13 +56,25 @@ const VerificationForm = ({ email, onVerify, onResend, resendLoading, loading }:
       </div>
 
       {error && (
-        <Alert type="error" message={error} showIcon closable onClose={() => setError(null)} className="mb-4" />
+        <Alert
+          type="error"
+          message={error}
+          showIcon
+          closable
+          onClose={() => setError(null)}
+          className="mb-4"
+        />
       )}
 
-      <Form layout="vertical" onFinish={handleVerify} requiredMark={false} size="large">
+      <Form
+        layout="vertical"
+        onFinish={handleVerify}
+        requiredMark={false}
+        size="large"
+      >
         <Form.Item
           name="token"
-          rules={[{ required: true, message: 'Enter the verification code' }]}
+          rules={[{ required: true, message: "Enter the verification code" }]}
         >
           <Input
             placeholder={`${OTP_DIGITS}-digit code`}
@@ -66,18 +84,33 @@ const VerificationForm = ({ email, onVerify, onResend, resendLoading, loading }:
             className="!text-center tracking-[0.5em] !text-xl font-semibold"
           />
         </Form.Item>
-        <Button type="primary" htmlType="submit" block size="large" loading={loading}>
+        <Button
+          type="primary"
+          htmlType="submit"
+          block
+          size="large"
+          loading={loading}
+        >
           Verify
         </Button>
       </Form>
 
       <div className="mt-6 text-center text-sm text-muted">
-        Didn&apos;t get it?{' '}
-        <Button type="link" className="!p-0 !h-auto text-brand font-medium" loading={resendLoading} onClick={handleResend}>
+        Didn&apos;t get it?{" "}
+        <Button
+          type="link"
+          className="!p-0 !h-auto text-brand font-medium"
+          loading={resendLoading}
+          onClick={handleResend}
+        >
           Resend code
         </Button>
       </div>
-      {resendSent && <p className="mt-2 text-center text-xs text-muted">A new code is on its way.</p>}
+      {resendSent && (
+        <p className="mt-2 text-center text-xs text-muted">
+          A new code is on its way.
+        </p>
+      )}
     </div>
   );
 };

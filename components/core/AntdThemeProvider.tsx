@@ -1,8 +1,8 @@
-'use client';
+"use client";
 
-import React from 'react';
-import { ConfigProvider } from 'antd';
-import { antdTheme } from '@/lib/theme';
+import React from "react";
+import { ConfigProvider } from "antd";
+import { antdTheme } from "@/lib/theme";
 
 interface AntdThemeProviderProps {
   children: React.ReactNode;

@@ -1,4 +1,4 @@
-import PlaceholderPage from '@/components/layout/PlaceholderPage';
+import PlaceholderPage from "@/components/layout/PlaceholderPage";
 
 const AnalyticsPage = () => (
   <PlaceholderPage

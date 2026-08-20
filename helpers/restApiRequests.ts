@@ -1,6 +1,6 @@
-import axiosInstance from '@/utils/axiosInstance';
-import type { TokenPair } from '@/helpers/token';
-import type { AxiosResponse } from 'axios';
+import axiosInstance from "@/utils/axiosInstance";
+import type { TokenPair } from "@/helpers/token";
+import type { AxiosResponse } from "axios";
 
 // All /auth/* + /organization REST calls against the Openlytic API.
 // Response envelope: { data, message }. Errors reject with err.response?.data?.message.
@@ -66,77 +66,94 @@ export interface CreateOrganizationParams {
 }
 
 export const requestForLogin = (
-  body: LoginParams
-): Promise<AxiosResponse<ApiEnvelope<TokenPair>>> => axiosInstance.post('/auth/login', body);
+  body: LoginParams,
+): Promise<AxiosResponse<ApiEnvelope<TokenPair>>> =>
+  axiosInstance.post("/auth/login", body);
 
 export const requestForPreRegister = (
-  body: PreRegisterParams
+  body: PreRegisterParams,
 ): Promise<AxiosResponse<ApiEnvelope<PreRegisterData>>> =>
-  axiosInstance.post('/auth/pre-register', body);
+  axiosInstance.post("/auth/pre-register", body);
 
 export const requestForRegister = (
-  body: RegisterParams
+  body: RegisterParams,
 ): Promise<AxiosResponse<ApiEnvelope<TokenPair & { user?: UserData }>>> =>
-  axiosInstance.post('/auth/register', body);
+  axiosInstance.post("/auth/register", body);
 
-export const requestForVerify = (
-  body: { user_id: string; token: string }
-): Promise<AxiosResponse<ApiEnvelope<Record<string, unknown>>>> =>
-  axiosInstance.post('/auth/verify', body);
+export const requestForVerify = (body: {
+  user_id: string;
+  token: string;
+}): Promise<AxiosResponse<ApiEnvelope<Record<string, unknown>>>> =>
+  axiosInstance.post("/auth/verify", body);
 
-export const requestForResendOtp = (
-  body: { email: string; user_id?: string | null }
-): Promise<AxiosResponse<ApiEnvelope<Record<string, unknown>>>> =>
-  axiosInstance.post('/auth/resend-verification', body);
+export const requestForResendOtp = (body: {
+  email: string;
+  user_id?: string | null;
+}): Promise<AxiosResponse<ApiEnvelope<Record<string, unknown>>>> =>
+  axiosInstance.post("/auth/resend-verification", body);
 
-export const requestForForgotPassword = (
-  body: { email: string }
-): Promise<AxiosResponse<ApiEnvelope<Record<string, unknown>>>> =>
-  axiosInstance.post('/auth/forgot-password', body);
+export const requestForForgotPassword = (body: {
+  email: string;
+}): Promise<AxiosResponse<ApiEnvelope<Record<string, unknown>>>> =>
+  axiosInstance.post("/auth/forgot-password", body);
 
-export const requestForVerifyForgotPassCode = (
-  body: { email: string; token: string }
-): Promise<AxiosResponse<ApiEnvelope<{ success?: boolean; message?: string }>>> =>
-  axiosInstance.post('/auth/verify-forgot-password-code', body);
+export const requestForVerifyForgotPassCode = (body: {
+  email: string;
+  token: string;
+}): Promise<
+  AxiosResponse<ApiEnvelope<{ success?: boolean; message?: string }>>
+> => axiosInstance.post("/auth/verify-forgot-password-code", body);
 
-export const requestForVerifyForgotPass = (
-  body: { email: string; password: string; token: string }
-): Promise<AxiosResponse<ApiEnvelope<Record<string, unknown>>>> =>
-  axiosInstance.post('/auth/verify-forgot-password', body);
+export const requestForVerifyForgotPass = (body: {
+  email: string;
+  password: string;
+  token: string;
+}): Promise<AxiosResponse<ApiEnvelope<Record<string, unknown>>>> =>
+  axiosInstance.post("/auth/verify-forgot-password", body);
 
-export const requestForRetryForgotPassword = (
-  body: { email: string }
-): Promise<AxiosResponse<ApiEnvelope<Record<string, unknown>>>> =>
-  axiosInstance.post('/auth/retry-forgot-password', body);
+export const requestForRetryForgotPassword = (body: {
+  email: string;
+}): Promise<AxiosResponse<ApiEnvelope<Record<string, unknown>>>> =>
+  axiosInstance.post("/auth/retry-forgot-password", body);
 
-export const requestForChangePassword = (
-  body: { old_password: string; new_password: string }
-): Promise<AxiosResponse<ApiEnvelope<Record<string, unknown>>>> =>
-  axiosInstance.post('/auth/change-password', body);
+export const requestForChangePassword = (body: {
+  old_password: string;
+  new_password: string;
+}): Promise<AxiosResponse<ApiEnvelope<Record<string, unknown>>>> =>
+  axiosInstance.post("/auth/change-password", body);
 
-export const requestForGetUser = (): Promise<AxiosResponse<ApiEnvelope<UserData>>> =>
-  axiosInstance.get('/auth/user');
+export const requestForGetUser = (): Promise<
+  AxiosResponse<ApiEnvelope<UserData>>
+> => axiosInstance.get("/auth/user");
 
-export const requestForLogout = (
-  body: { token: string | null; type: string }
-): Promise<AxiosResponse<ApiEnvelope<Record<string, unknown>>>> =>
-  axiosInstance.post('/auth/logout', body);
+export const requestForLogout = (body: {
+  token: string | null;
+  type: string;
+}): Promise<AxiosResponse<ApiEnvelope<Record<string, unknown>>>> =>
+  axiosInstance.post("/auth/logout", body);
 
-export const requestForRefreshToken = (
-  body: { refresh_token: string; access_token?: string; org_id?: string }
-): Promise<AxiosResponse<ApiEnvelope<TokenPair & { user?: UserData }>>> =>
-  axiosInstance.post('/auth/refresh-token', body);
+export const requestForRefreshToken = (body: {
+  refresh_token: string;
+  access_token?: string;
+  org_id?: string;
+}): Promise<AxiosResponse<ApiEnvelope<TokenPair & { user?: UserData }>>> =>
+  axiosInstance.post("/auth/refresh-token", body);
 
 export const requestForGetOrgSubDomainAvailability = (
-  subDomain: string
+  subDomain: string,
 ): Promise<AxiosResponse<ApiEnvelope<SubDomainAvailabilityData>>> =>
-  axiosInstance.get(`/organization/check-availability?sub_domain=${encodeURIComponent(subDomain)}`);
+  axiosInstance.get(
+    `/organization/check-availability?sub_domain=${encodeURIComponent(subDomain)}`,
+  );
 
 export const requestForCreateOrganization = (
-  body: CreateOrganizationParams
-): Promise<AxiosResponse<ApiEnvelope<{ id: string }>>> => axiosInstance.post('/organization', body);
+  body: CreateOrganizationParams,
+): Promise<AxiosResponse<ApiEnvelope<{ id: string }>>> =>
+  axiosInstance.post("/organization", body);
 
 export const requestForGetAnOrganization = (
-  subDomain: string
+  subDomain: string,
 ): Promise<AxiosResponse<ApiEnvelope<UserData & { id: string }>>> =>
-  axiosInstance.get(`/organization?sub_domain=${encodeURIComponent(subDomain)}`);
+  axiosInstance.get(
+    `/organization?sub_domain=${encodeURIComponent(subDomain)}`,
+  );

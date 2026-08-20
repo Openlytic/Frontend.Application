@@ -1,9 +1,9 @@
-'use client';
+"use client";
 
-import React from 'react';
-import { Drawer } from 'antd';
-import Sidebar from '@/components/layout/Sidebar';
-import Topbar from '@/components/layout/Topbar';
+import React from "react";
+import { Drawer } from "antd";
+import Sidebar from "@/components/layout/Sidebar";
+import Topbar from "@/components/layout/Topbar";
 
 interface PrivateLayoutProps {
   children: React.ReactNode;
@@ -23,7 +23,7 @@ const PrivateLayout = ({ children }: PrivateLayoutProps) => {
         width={280}
         open={drawerOpen}
         onClose={() => setDrawerOpen(false)}
-        styles={{ body: { padding: 0, background: '#1E1B4B' } }}
+        styles={{ body: { padding: 0, background: "#1E1B4B" } }}
         closable={false}
       >
         <Sidebar onNavigate={() => setDrawerOpen(false)} />

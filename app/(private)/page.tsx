@@ -1,24 +1,29 @@
-'use client';
+"use client";
 
-import React from 'react';
-import Link from 'next/link';
-import { Card, Skeleton, Empty, Progress } from 'antd';
+import React from "react";
+import Link from "next/link";
+import { Card, Skeleton, Empty, Progress } from "antd";
 import {
   MailOutlined,
   EyeOutlined,
   ThunderboltOutlined,
   CheckCircleOutlined,
   RiseOutlined,
-  RightOutlined
-} from '@ant-design/icons';
-import { useQuery } from '@apollo/client';
-import dayjs from 'dayjs';
-import { GET_EMAILS } from '@/utils/emails.crud';
-import { GET_EMAIL_ANALYTICS } from '@/utils/analytics.crud';
-import { requestForGetUser } from '@/helpers/restApiRequests';
-import type { UserData } from '@/helpers/restApiRequests';
-import { isMockMode, mockUser, mockEmails, mockAnalytics } from '@/lib/mockData';
-import type { MockAnalytic, MockEmail } from '@/lib/mockData';
+  RightOutlined,
+} from "@ant-design/icons";
+import { useQuery } from "@apollo/client";
+import dayjs from "dayjs";
+import { GET_EMAILS } from "@/utils/emails.crud";
+import { GET_EMAIL_ANALYTICS } from "@/utils/analytics.crud";
+import { requestForGetUser } from "@/helpers/restApiRequests";
+import type { UserData } from "@/helpers/restApiRequests";
+import {
+  isMockMode,
+  mockUser,
+  mockEmails,
+  mockAnalytics,
+} from "@/lib/mockData";
+import type { MockAnalytic, MockEmail } from "@/lib/mockData";
 
 interface StatItem {
   title: string;
@@ -40,13 +45,21 @@ const EngagementRow = ({ label, percent, color }: EngagementRowProps) => (
       <span className="text-muted">{label}</span>
       <span className="font-semibold text-ink">{percent}%</span>
     </div>
-    <Progress percent={percent} showInfo={false} strokeColor={color} trailColor="#F1F5F9" size="small" />
+    <Progress
+      percent={percent}
+      showInfo={false}
+      strokeColor={color}
+      trailColor="#F1F5F9"
+      size="small"
+    />
   </div>
 );
 
 const DashboardPage = () => {
   const MOCK = isMockMode();
-  const [user, setUser] = React.useState<UserData | null>(MOCK ? mockUser : null);
+  const [user, setUser] = React.useState<UserData | null>(
+    MOCK ? mockUser : null,
+  );
 
   React.useEffect(() => {
     if (MOCK) return undefined;
@@ -58,19 +71,23 @@ const DashboardPage = () => {
 
   const { data: emailsData, loading: emailsLoading } = useQuery(GET_EMAILS, {
     variables: { optionData: { limit: 5 } },
-    fetchPolicy: 'network-only',
-    skip: MOCK
+    fetchPolicy: "network-only",
+    skip: MOCK,
   });
 
-  const { data: analyticsData, loading: analyticsLoading } = useQuery(GET_EMAIL_ANALYTICS, {
-    variables: { optionData: { limit: 100 } },
-    fetchPolicy: 'network-only',
-    skip: MOCK
-  });
+  const { data: analyticsData, loading: analyticsLoading } = useQuery(
+    GET_EMAIL_ANALYTICS,
+    {
+      variables: { optionData: { limit: 100 } },
+      fetchPolicy: "network-only",
+      skip: MOCK,
+    },
+  );
 
   const analytics: MockAnalytic[] = MOCK
     ? mockAnalytics
-    : (analyticsData?.getEmailAnalytics?.data as MockAnalytic[] | undefined) || [];
+    : (analyticsData?.getEmailAnalytics?.data as MockAnalytic[] | undefined) ||
+      [];
   const emails: MockEmail[] = MOCK
     ? mockEmails
     : (emailsData?.getEmails?.data as MockEmail[] | undefined) || [];
@@ -81,20 +98,46 @@ const DashboardPage = () => {
   const opened = analytics.filter((a) => a.open_count > 0).length;
   const clicked = analytics.filter((a) => a.click_count > 0).length;
   const delivered = analytics.filter((a) => a.delivered_at).length;
-  const bounced = analytics.filter((a) => a.bounced_at || a.complained_at || a.rejected_at).length;
+  const bounced = analytics.filter(
+    (a) => a.bounced_at || a.complained_at || a.rejected_at,
+  ).length;
 
   const stats: StatItem[] = [
-    { title: 'Emails sent', value: totalSent, icon: <MailOutlined />, accent: 'from-indigo-500 to-violet-500', key: 'sent' },
-    { title: 'Opens', value: opened, icon: <EyeOutlined />, accent: 'from-sky-500 to-indigo-500', key: 'opened' },
-    { title: 'Clicks', value: clicked, icon: <ThunderboltOutlined />, accent: 'from-violet-500 to-purple-500', key: 'clicked' },
-    { title: 'Delivered', value: delivered, icon: <CheckCircleOutlined />, accent: 'from-emerald-500 to-teal-500', key: 'delivered' }
+    {
+      title: "Emails sent",
+      value: totalSent,
+      icon: <MailOutlined />,
+      accent: "from-indigo-500 to-violet-500",
+      key: "sent",
+    },
+    {
+      title: "Opens",
+      value: opened,
+      icon: <EyeOutlined />,
+      accent: "from-sky-500 to-indigo-500",
+      key: "opened",
+    },
+    {
+      title: "Clicks",
+      value: clicked,
+      icon: <ThunderboltOutlined />,
+      accent: "from-violet-500 to-purple-500",
+      key: "clicked",
+    },
+    {
+      title: "Delivered",
+      value: delivered,
+      icon: <CheckCircleOutlined />,
+      accent: "from-emerald-500 to-teal-500",
+      key: "delivered",
+    },
   ];
 
   const openRate = totalSent ? Math.round((opened / totalSent) * 100) : 0;
   const clickRate = totalSent ? Math.round((clicked / totalSent) * 100) : 0;
   const bounceRate = totalSent ? Math.round((bounced / totalSent) * 100) : 0;
 
-  const firstName = user?.first_name || 'there';
+  const firstName = user?.first_name || "there";
 
   return (
     <div className="animate-fade-up">
@@ -117,15 +160,25 @@ const DashboardPage = () => {
 
       <div className="mt-6 grid grid-cols-2 gap-4 xl:grid-cols-4">
         {stats.map((stat) => (
-          <Card key={stat.key} className="rounded-2xl shadow-card" styles={{ body: { padding: 20 } }}>
+          <Card
+            key={stat.key}
+            className="rounded-2xl shadow-card"
+            styles={{ body: { padding: 20 } }}
+          >
             <div className="flex items-start justify-between">
               <div>
                 <p className="text-sm text-muted">{stat.title}</p>
                 <p className="mt-1 font-poppins text-3xl font-semibold text-ink">
-                  {analyticsBusy ? <Skeleton.Input active size="small" className="!w-10" /> : stat.value}
+                  {analyticsBusy ? (
+                    <Skeleton.Input active size="small" className="!w-10" />
+                  ) : (
+                    stat.value
+                  )}
                 </p>
               </div>
-              <div className={`flex h-11 w-11 items-center justify-center rounded-xl bg-gradient-to-br text-white ${stat.accent}`}>
+              <div
+                className={`flex h-11 w-11 items-center justify-center rounded-xl bg-gradient-to-br text-white ${stat.accent}`}
+              >
                 {stat.icon}
               </div>
             </div>
@@ -134,15 +187,27 @@ const DashboardPage = () => {
       </div>
 
       <div className="mt-6 grid gap-4 lg:grid-cols-3">
-        <Card className="rounded-2xl shadow-card lg:col-span-2" title="Recent emails" styles={{ body: { paddingTop: 8 } }}>
+        <Card
+          className="rounded-2xl shadow-card lg:col-span-2"
+          title="Recent emails"
+          styles={{ body: { paddingTop: 8 } }}
+        >
           {emailsBusy ? (
             <div className="space-y-3 py-2">
               {[1, 2, 3].map((i) => (
-                <Skeleton key={i} active paragraph={{ rows: 1 }} title={{ width: '60%' }} />
+                <Skeleton
+                  key={i}
+                  active
+                  paragraph={{ rows: 1 }}
+                  title={{ width: "60%" }}
+                />
               ))}
             </div>
           ) : emails.length === 0 ? (
-            <Empty description="No emails sent yet" image={Empty.PRESENTED_IMAGE_SIMPLE}>
+            <Empty
+              description="No emails sent yet"
+              image={Empty.PRESENTED_IMAGE_SIMPLE}
+            >
               <Link href="/emails" className="text-brand text-sm font-medium">
                 Compose your first tracked email
               </Link>
@@ -159,13 +224,17 @@ const DashboardPage = () => {
                     <MailOutlined />
                   </div>
                   <div className="min-w-0 flex-1">
-                    <p className="truncate text-sm font-medium text-ink">{email.subject || 'No subject'}</p>
+                    <p className="truncate text-sm font-medium text-ink">
+                      {email.subject || "No subject"}
+                    </p>
                     <p className="truncate text-xs text-muted">
-                      {email.to?.[0]?.email || 'No recipients'}
+                      {email.to?.[0]?.email || "No recipients"}
                     </p>
                   </div>
                   <span className="hidden sm:block text-xs text-muted">
-                    {email.sent_at ? dayjs(email.sent_at).format('MMM D, h:mm A') : dayjs(email.created_at).format('MMM D, h:mm A')}
+                    {email.sent_at
+                      ? dayjs(email.sent_at).format("MMM D, h:mm A")
+                      : dayjs(email.created_at).format("MMM D, h:mm A")}
                   </span>
                   <RightOutlined className="text-xs text-muted" />
                 </Link>
@@ -174,27 +243,53 @@ const DashboardPage = () => {
           )}
         </Card>
 
-        <Card className="rounded-2xl shadow-card" title="Engagement" styles={{ body: { paddingTop: 12 } }}>
+        <Card
+          className="rounded-2xl shadow-card"
+          title="Engagement"
+          styles={{ body: { paddingTop: 12 } }}
+        >
           {analyticsBusy ? (
             <div className="space-y-4 py-2">
               {[1, 2, 3].map((i) => (
-                <Skeleton key={i} active paragraph={{ rows: 1 }} title={{ width: '40%' }} />
+                <Skeleton
+                  key={i}
+                  active
+                  paragraph={{ rows: 1 }}
+                  title={{ width: "40%" }}
+                />
               ))}
             </div>
           ) : totalSent === 0 ? (
-            <Empty description="Send an email to see engagement" image={Empty.PRESENTED_IMAGE_SIMPLE} />
+            <Empty
+              description="Send an email to see engagement"
+              image={Empty.PRESENTED_IMAGE_SIMPLE}
+            />
           ) : (
             <div className="space-y-5 py-1">
-              <EngagementRow label="Opened" percent={openRate} color="#4F46E5" />
-              <EngagementRow label="Clicked" percent={clickRate} color="#8B5CF6" />
-              <EngagementRow label="Bounced / failed" percent={bounceRate} color="#EF4444" />
+              <EngagementRow
+                label="Opened"
+                percent={openRate}
+                color="#4F46E5"
+              />
+              <EngagementRow
+                label="Clicked"
+                percent={clickRate}
+                color="#8B5CF6"
+              />
+              <EngagementRow
+                label="Bounced / failed"
+                percent={bounceRate}
+                color="#EF4444"
+              />
               <div className="rounded-xl bg-subtle/70 p-3.5 flex items-center gap-3">
                 <div className="flex h-9 w-9 items-center justify-center rounded-lg bg-brand text-white">
                   <RiseOutlined />
                 </div>
                 <p className="text-xs text-muted leading-relaxed">
-                  <span className="font-medium text-ink">{openRate}% open rate</span> across {totalSent} tracked
-                  email{totalSent === 1 ? '' : 's'}.
+                  <span className="font-medium text-ink">
+                    {openRate}% open rate
+                  </span>{" "}
+                  across {totalSent} tracked email{totalSent === 1 ? "" : "s"}.
                 </p>
               </div>
             </div>

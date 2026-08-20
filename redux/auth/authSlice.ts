@@ -1,6 +1,6 @@
-import { createSlice } from '@reduxjs/toolkit';
-import type { PayloadAction } from '@reduxjs/toolkit';
-import type { UserData } from '@/helpers/restApiRequests';
+import { createSlice } from "@reduxjs/toolkit";
+import type { PayloadAction } from "@reduxjs/toolkit";
+import type { UserData } from "@/helpers/restApiRequests";
 
 interface AuthState {
   user: UserData | null;
@@ -11,11 +11,11 @@ interface AuthState {
 const initialState: AuthState = {
   user: null,
   isAuthenticated: false,
-  token: null
+  token: null,
 };
 
 const authSlice = createSlice({
-  name: 'auth',
+  name: "auth",
   initialState,
   reducers: {
     setUser: (state, action: PayloadAction<UserData | null>) => {
@@ -25,8 +25,8 @@ const authSlice = createSlice({
     setToken: (state, action: PayloadAction<string | null>) => {
       state.token = action.payload;
     },
-    logout: () => initialState
-  }
+    logout: () => initialState,
+  },
 });
 
 export const { setUser, setToken, logout } = authSlice.actions;

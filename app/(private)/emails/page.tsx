@@ -1,53 +1,66 @@
-'use client';
+"use client";
 
-import React from 'react';
-import Link from 'next/link';
-import { useRouter } from 'next/navigation';
-import { Input, Select, Button, Table, Tag, Empty } from 'antd';
-import { SearchOutlined, MailOutlined, PlusOutlined } from '@ant-design/icons';
-import { useQuery } from '@apollo/client';
-import dayjs from 'dayjs';
-import { GET_EMAILS } from '@/utils/emails.crud';
-import { isMockMode, mockEmails } from '@/lib/mockData';
-import type { MockEmail } from '@/lib/mockData';
-import type { ColumnsType } from 'antd/es/table';
+import React from "react";
+import Link from "next/link";
+import { useRouter } from "next/navigation";
+import { Input, Select, Button, Table, Tag, Empty } from "antd";
+import { SearchOutlined, MailOutlined, PlusOutlined } from "@ant-design/icons";
+import { useQuery } from "@apollo/client";
+import dayjs from "dayjs";
+import ComposeModal from "@/components/email/ComposeModal";
+import { GET_EMAILS } from "@/utils/emails.crud";
+import { isMockMode, mockEmails } from "@/lib/mockData";
+import type { MockEmail } from "@/lib/mockData";
+import type { ColumnsType } from "antd/es/table";
 
 const STAGE_OPTIONS = [
-  { value: 'sent', label: 'Sent' },
-  { value: 'draft', label: 'Drafts' },
-  { value: 'inbox', label: 'Inbox' }
+  { value: "sent", label: "Sent" },
+  { value: "draft", label: "Drafts" },
+  { value: "inbox", label: "Inbox" },
 ];
 
 const EmailsPage = () => {
   const MOCK = isMockMode();
   const router = useRouter();
-  const [search, setSearch] = React.useState('');
+  const [search, setSearch] = React.useState("");
   const [stage, setStage] = React.useState<string | undefined>(undefined);
   const [page, setPage] = React.useState(1);
+  const [composeOpen, setComposeOpen] = React.useState(false);
+  const [emails, setEmails] = React.useState<MockEmail[]>([]);
   const pageSize = 10;
 
   const queryData = {
     ...(search ? { search_keyword: search } : {}),
-    ...(stage ? { stage } : {})
+    ...(stage ? { stage } : {}),
   };
 
   const { data, loading } = useQuery(GET_EMAILS, {
-    variables: { queryData, optionData: { limit: pageSize, offset: (page - 1) * pageSize } },
-    fetchPolicy: 'network-only',
-    skip: MOCK
+    variables: {
+      queryData,
+      optionData: { limit: pageSize, offset: (page - 1) * pageSize },
+    },
+    fetchPolicy: "network-only",
+    skip: MOCK,
   });
 
-  const emails: MockEmail[] = MOCK
-    ? mockEmails
-    : (data?.getEmails?.data as MockEmail[] | undefined) || [];
-  const total = MOCK ? mockEmails.length : data?.getEmails?.meta_data?.total_rows || 0;
+  React.useEffect(() => {
+    setEmails(
+      MOCK
+        ? [...mockEmails]
+        : (data?.getEmails?.data as MockEmail[] | undefined) || [],
+    );
+  }, [data, MOCK]);
+
+  const total = MOCK
+    ? emails.length
+    : data?.getEmails?.meta_data?.total_rows || 0;
   const busy = MOCK ? false : loading;
 
   const columns: ColumnsType<MockEmail> = [
     {
-      title: 'Subject',
-      dataIndex: 'subject',
-      key: 'subject',
+      title: "Subject",
+      dataIndex: "subject",
+      key: "subject",
       render: (subject, record) => (
         <Link href={`/emails/${record.id}`} className="group">
           <div className="flex items-center gap-3">
@@ -56,57 +69,63 @@ const EmailsPage = () => {
             </div>
             <div className="min-w-0">
               <p className="truncate font-medium text-ink group-hover:text-brand transition-colors">
-                {subject || 'No subject'}
+                {subject || "No subject"}
               </p>
               <p className="truncate text-xs text-muted">
-                {record.to?.[0]?.email || 'No recipients'}
+                {record.to?.[0]?.email || "No recipients"}
               </p>
             </div>
           </div>
         </Link>
-      )
+      ),
     },
     {
-      title: 'Stage',
-      dataIndex: 'stage',
-      key: 'stage',
+      title: "Stage",
+      dataIndex: "stage",
+      key: "stage",
       width: 120,
       render: (s: string) => (
         <Tag
           className="rounded-full !border-none capitalize"
-          color={s === 'sent' ? 'success' : s === 'draft' ? 'default' : 'processing'}
+          color={
+            s === "sent" ? "success" : s === "draft" ? "default" : "processing"
+          }
         >
           {s}
         </Tag>
-      )
+      ),
     },
     {
-      title: 'Tracking',
-      dataIndex: 'tracking_enabled',
-      key: 'tracking_enabled',
+      title: "Tracking",
+      dataIndex: "tracking_enabled",
+      key: "tracking_enabled",
       width: 110,
       render: (enabled: boolean) =>
         enabled ? (
-          <Tag className="rounded-full !border-none !bg-subtle !text-brand">On</Tag>
+          <Tag className="rounded-full !border-none !bg-subtle !text-brand">
+            On
+          </Tag>
         ) : (
-          <Tag className="rounded-full !border-none !bg-gray-100 !text-muted">Off</Tag>
-        )
+          <Tag className="rounded-full !border-none !bg-gray-100 !text-muted">
+            Off
+          </Tag>
+        ),
     },
     {
-      title: 'Sent',
-      dataIndex: 'sent_at',
-      key: 'sent_at',
+      title: "Sent",
+      dataIndex: "sent_at",
+      key: "sent_at",
       width: 150,
       render: (sentAt, record) => (
         <span className="text-sm text-muted">
           {sentAt
-            ? dayjs(sentAt).format('MMM D, YYYY h:mm A')
-            : dayjs(record.created_at).format('MMM D, YYYY')}
+            ? dayjs(sentAt).format("MMM D, YYYY h:mm A")
+            : dayjs(record.created_at).format("MMM D, YYYY")}
         </span>
-      )
+      ),
     },
     {
-      key: 'action',
+      key: "action",
       width: 90,
       render: (_, record) => (
         <Button
@@ -116,15 +135,17 @@ const EmailsPage = () => {
         >
           View
         </Button>
-      )
-    }
+      ),
+    },
   ];
 
   return (
     <div className="animate-fade-up">
       <div className="flex items-center justify-between gap-4">
         <div>
-          <h1 className="font-poppins text-2xl font-semibold text-ink tracking-tight">Emails</h1>
+          <h1 className="font-poppins text-2xl font-semibold text-ink tracking-tight">
+            Emails
+          </h1>
           <p className="mt-1 text-sm text-muted">
             Every tracked email your workspace has sent.
           </p>
@@ -133,7 +154,7 @@ const EmailsPage = () => {
           type="primary"
           icon={<PlusOutlined />}
           size="large"
-          onClick={() => router.push('/emails')}
+          onClick={() => setComposeOpen(true)}
           className="shadow-card"
         >
           Compose
@@ -178,7 +199,7 @@ const EmailsPage = () => {
             pageSize,
             total,
             onChange: (p) => setPage(p),
-            showTotal: (t) => `${t} emails`
+            showTotal: (t) => `${t} emails`,
           }}
           locale={{
             emptyText: (
@@ -187,15 +208,21 @@ const EmailsPage = () => {
                 image={Empty.PRESENTED_IMAGE_SIMPLE}
                 className="py-10"
               />
-            )
+            ),
           }}
           className="!rounded-2xl"
         />
       </div>
       <div className="mt-3 text-xs text-muted">
-        Tip: sending tracked email requires recipients provisioned in the workspace (backend add-on). Lists and
-        analytics are fully live.
+        Tip: recipients are workspace members provisioned in your org. Sent
+        emails land in the list and are tracked automatically.
       </div>
+
+      <ComposeModal
+        open={composeOpen}
+        onClose={() => setComposeOpen(false)}
+        onCreated={(email) => setEmails((prev) => [email, ...prev])}
+      />
     </div>
   );
 };
