@@ -8,9 +8,16 @@ import {
   UserOutlined,
   MenuOutlined,
   DownOutlined,
+  ApartmentOutlined,
+  CheckOutlined,
 } from "@ant-design/icons";
 import { requestForGetUser, requestForLogout } from "@/helpers/restApiRequests";
-import { getAccessToken, removeTokens } from "@/helpers/token";
+import {
+  getAccessToken,
+  removeTokens,
+  clearOrgId,
+} from "@/helpers/token";
+import { useOrgScope } from "@/components/org/OrgScopeProvider";
 import type { UserData } from "@/helpers/restApiRequests";
 
 const initials = (name?: string, email?: string): string => {
@@ -32,6 +39,8 @@ interface TopbarProps {
 const Topbar = ({ onOpenSidebar }: TopbarProps) => {
   const router = useRouter();
   const [user, setUser] = React.useState<UserData | null>(null);
+  const { organizations, activeOrgId, switchOrg, switchingOrg } =
+    useOrgScope();
 
   React.useEffect(() => {
     requestForGetUser()
@@ -46,8 +55,21 @@ const Topbar = ({ onOpenSidebar }: TopbarProps) => {
       // local logout regardless of server state
     } finally {
       removeTokens();
+      clearOrgId();
       router.push("/login");
     }
+  };
+
+  const activeOrg =
+    organizations.find((org) => org.org_id === activeOrgId) || null;
+
+  const orgMenu = {
+    items: organizations.map((org) => ({
+      key: org.org_id,
+      icon: org.org_id === activeOrgId ? <CheckOutlined /> : undefined,
+      label: org.name,
+      onClick: () => switchOrg(org.org_id),
+    })),
   };
 
   const displayName =
@@ -83,6 +105,25 @@ const Topbar = ({ onOpenSidebar }: TopbarProps) => {
         aria-label="Open navigation"
       />
       <div className="flex-1" />
+      {organizations.length > 0 && (
+        <Dropdown
+          menu={orgMenu}
+          placement="bottomRight"
+          trigger={["click"]}
+          disabled={switchingOrg}
+        >
+          <button
+            className="flex items-center gap-2 rounded-xl border border-line bg-white px-2.5 py-1.5 hover:border-brand/40 transition-colors cursor-pointer"
+            aria-label="Switch organization"
+          >
+            <ApartmentOutlined className="text-muted" />
+            <span className="hidden sm:block max-w-[160px] truncate text-sm font-medium text-ink">
+              {activeOrg?.name || "Organization"}
+            </span>
+            <DownOutlined className="text-xs text-muted" />
+          </button>
+        </Dropdown>
+      )}
       <Dropdown menu={userMenu} placement="bottomRight" trigger={["click"]}>
         <button className="flex items-center gap-2.5 rounded-xl border border-line bg-white px-2.5 py-1.5 hover:border-brand/40 transition-colors cursor-pointer">
           <Avatar
