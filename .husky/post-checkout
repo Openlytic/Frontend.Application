@@ -1,0 +1,12 @@
+# + This script is used to install dependencies after checking out a new branch.
+
+#!/usr/bin/env sh
+
+# - imports
+. "$(dirname -- "$0")/lib/package-manager"
+
+# - construct command
+INSTALL_COMMAND="$PACKAGE_MANAGER install"
+
+# - run command
+$INSTALL_COMMAND
