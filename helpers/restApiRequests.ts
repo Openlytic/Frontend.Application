@@ -16,12 +16,20 @@ export interface LoginParams {
   org_id?: string;
 }
 
+export interface OrganizationMembershipData {
+  org_id: string;
+  name: string;
+  sub_domain: string;
+  role: string;
+}
+
 export interface UserData {
   id: string;
   email: string;
   first_name?: string | null;
   last_name?: string | null;
   status?: string;
+  organizations?: OrganizationMembershipData[];
 }
 
 export interface PreRegisterParams {

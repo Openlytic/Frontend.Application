@@ -3,6 +3,7 @@ import { jwtDecode } from "jwt-decode";
 
 export const TOKEN_COOKIE = "accessToken";
 export const REFRESH_TOKEN_COOKIE = "refreshToken";
+export const ORG_ID_COOKIE = "orgId";
 export const SIGNUP_USER_COOKIE = "signupUser";
 export const RESET_EMAIL_COOKIE = "resetPasswordEmail";
 export const RESET_TOKEN_COOKIE = "resetPasswordToken";
@@ -30,6 +31,16 @@ export const getAccessToken = (): string | null =>
   Cookies.get(TOKEN_COOKIE) || null;
 export const getRefreshToken = (): string | null =>
   Cookies.get(REFRESH_TOKEN_COOKIE) || null;
+
+export const getOrgId = (): string | null => Cookies.get(ORG_ID_COOKIE) || null;
+
+export const setOrgId = (orgId: string): void => {
+  Cookies.set(ORG_ID_COOKIE, orgId, COOKIE_OPTS);
+};
+
+export const clearOrgId = (): void => {
+  Cookies.remove(ORG_ID_COOKIE, { path: "/" });
+};
 
 export const setTokens = ({ access_token, refresh_token }: TokenPair): void => {
   if (access_token) Cookies.set(TOKEN_COOKIE, access_token, COOKIE_OPTS);
