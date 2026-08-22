@@ -55,6 +55,14 @@ export interface MockOrgUser {
   status: string;
 }
 
+export interface MockOrganization {
+  id: string;
+  name: string;
+  sub_domain: string;
+  status: string;
+  created_at: string;
+}
+
 export interface MockAnalytic {
   id: string;
   email_id: string;
@@ -101,6 +109,14 @@ export interface MockTrackingEvent {
   tracking_scope: string | null;
   created_at?: string;
 }
+
+export const mockOrganization: MockOrganization = {
+  id: "11111111-1111-4111-8111-111111111111",
+  name: "Northwind Traders",
+  sub_domain: "northwind",
+  status: "active",
+  created_at: d(120),
+};
 
 export const mockUser: MockUser = {
   id: "11111111-1111-4111-8111-111111111111",
