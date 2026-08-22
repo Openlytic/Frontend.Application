@@ -134,6 +134,12 @@ export const requestForGetUser = (): Promise<
   AxiosResponse<ApiEnvelope<UserData>>
 > => axiosInstance.get("/auth/user");
 
+export const requestForChangeEmail = (body: {
+  email: string;
+  new_email: string;
+}): Promise<AxiosResponse<ApiEnvelope<Record<string, unknown>>>> =>
+  axiosInstance.post("/auth/change-email", body);
+
 export const requestForLogout = (body: {
   token: string | null;
   type: string;
